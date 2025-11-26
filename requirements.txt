@@ -1,0 +1,89 @@
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy==2.0.23
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+alembic==1.12.1
+
+# Redis
+redis==5.0.1
+hiredis==2.2.3
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+cryptography==41.0.7
+
+# Background Jobs
+celery==5.3.4
+celery[redis]==5.3.4
+flower==2.0.1
+
+# ML & Data Science
+scikit-learn==1.3.2
+xgboost==2.0.2
+prophet==1.1.5
+pandas==2.1.3
+numpy==1.26.2
+joblib==1.3.2
+
+# AWS
+boto3==1.29.7
+botocore==1.32.7
+
+# Integrations
+httpx==0.25.2
+requests==2.31.0
+razorpay==1.4.1
+
+# Monitoring & Logging
+sentry-sdk[fastapi]==1.38.0
+structlog==23.2.0
+python-json-logger==2.0.7
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+shortuuid==1.0.11
+python-slugify==8.0.1
+
+# Email
+emails==0.6
+jinja2==3.1.2
+
+# Rate Limiting
+slowapi==0.1.9
+
+# Excel/CSV Export
+openpyxl==3.1.2
+xlsxwriter==3.1.9
+
+# PDF Generation
+reportlab==4.0.7
+weasyprint==60.1
+
+# Validation & Parsing
+phonenumbers==8.13.26
+email-validator==2.1.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
+faker==20.1.0
+
+# Development
+black==23.12.0
+flake8==6.1.0
+mypy==1.7.1
+pre-commit==3.5.0
+
+# Environment
+python-dotenv==1.0.0
