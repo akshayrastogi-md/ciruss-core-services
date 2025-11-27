@@ -2,7 +2,7 @@
 Authentication endpoints
 """
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from slowapi import Limiter
@@ -39,6 +39,7 @@ limiter = Limiter(key_func=get_remote_address)
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 @limiter.limit(settings.RATE_LIMIT_LOGIN)
 async def register(
+    request: Request,
     user_data: UserRegister,
     db: AsyncSession = Depends(get_db),
     redis: RedisClient = Depends(get_redis),
@@ -161,6 +162,7 @@ async def register(
 @router.post("/login", response_model=TokenResponse)
 @limiter.limit(settings.RATE_LIMIT_LOGIN)
 async def login(
+    request: Request,
     credentials: UserLogin,
     db: AsyncSession = Depends(get_db),
     redis: RedisClient = Depends(get_redis),
