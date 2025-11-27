@@ -4,12 +4,9 @@ Security utilities for authentication and encryption
 from datetime import datetime, timedelta
 from typing import Any, Optional
 from jose import jwt, JWTError
-from passlib.context import CryptContext
+import bcrypt
 from cryptography.fernet import Fernet
 from app.core.config import settings
-
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Encryption
 cipher_suite = Fernet(settings.ENCRYPTION_KEY.encode())
@@ -17,12 +14,18 @@ cipher_suite = Fernet(settings.ENCRYPTION_KEY.encode())
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash"""
-    return pwd_context.verify(plain_password, hashed_password)
+    # Truncate password to 72 bytes (bcrypt limitation)
+    password_bytes = plain_password.encode('utf-8')[:72]
+    return bcrypt.checkpw(password_bytes, hashed_password.encode('utf-8'))
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password"""
-    return pwd_context.hash(password)
+    # Truncate password to 72 bytes (bcrypt limitation)
+    password_bytes = password.encode('utf-8')[:72]
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode('utf-8')
 
 
 def create_access_token(
@@ -31,6 +34,9 @@ def create_access_token(
 ) -> str:
     """Create a JWT access token"""
     to_encode = data.copy()
+    # Convert user_id to string for JWT 'sub' claim (required by python-jose)
+    if "sub" in to_encode and isinstance(to_encode["sub"], int):
+        to_encode["sub"] = str(to_encode["sub"])
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -49,6 +55,9 @@ def create_access_token(
 def create_refresh_token(data: dict) -> str:
     """Create a JWT refresh token"""
     to_encode = data.copy()
+    # Convert user_id to string for JWT 'sub' claim (required by python-jose)
+    if "sub" in to_encode and isinstance(to_encode["sub"], int):
+        to_encode["sub"] = str(to_encode["sub"])
     expire = datetime.utcnow() + timedelta(days=settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode.update({"exp": expire, "type": "refresh"})
     encoded_jwt = jwt.encode(

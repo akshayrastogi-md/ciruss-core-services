@@ -17,10 +17,17 @@ class RedisClient:
 
     async def connect(self):
         """Initialize Redis connections"""
-        base_url = settings.REDIS_URL.rsplit("/", 1)[0]
+        # Extract base URL properly - handle URLs with or without trailing /db
+        redis_url = settings.REDIS_URL
+        if redis_url.count('/') >= 3:
+            # URL has a database number (e.g., redis://host:port/0)
+            base_url = redis_url.rsplit("/", 1)[0]
+        else:
+            # URL doesn't have a database number (e.g., redis://host:port)
+            base_url = redis_url
 
         self.default_client = await redis.from_url(
-            settings.REDIS_URL,
+            f"{base_url}/0",  # Use explicit DB 0 for default
             encoding="utf-8",
             decode_responses=True,
         )
