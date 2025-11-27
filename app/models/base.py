@@ -3,7 +3,7 @@ Base model with common fields
 """
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import Column, Integer, DateTime, String, func
+from sqlalchemy import Column, Integer, DateTime, String, ForeignKey, func
 from sqlalchemy.ext.declarative import declared_attr
 from app.db.session import Base
 
@@ -34,4 +34,4 @@ class TenantBaseModel(BaseModel):
 
     @declared_attr
     def tenant_id(cls):
-        return Column(Integer, nullable=False, index=True)
+        return Column(Integer, ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False, index=True)
