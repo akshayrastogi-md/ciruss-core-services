@@ -1,0 +1,601 @@
+{
+  "info": {
+    "name": "D2C Analytics Platform API",
+    "description": "Complete API collection for D2C Analytics Platform with examples for all endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "3.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    console.log('Registration successful');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"SecurePass123!\",\n    \"full_name\": \"John Doe\",\n    \"company_name\": \"My D2C Store\",\n    \"gstin\": \"22AAAAA0000A1Z5\",\n    \"phone\": \"+91-9876543210\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('access_token', jsonData.access_token);",
+                  "    pm.environment.set('refresh_token', jsonData.refresh_token);",
+                  "    console.log('Login successful. Tokens saved.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"SecurePass123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('access_token', jsonData.access_token);",
+                  "    console.log('Token refreshed successfully.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Channels",
+      "item": [
+        {
+          "name": "List Channels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/channels",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "channels"]
+            }
+          }
+        },
+        {
+          "name": "Connect Shopify Channel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"My Shopify Store\",\n    \"channel_type\": \"shopify\",\n    \"store_url\": \"https://mystore.myshopify.com\",\n    \"credentials\": {\n        \"shop_name\": \"mystore\",\n        \"access_token\": \"shpat_xxxxxxxxxxxxx\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/channels",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "channels"]
+            }
+          }
+        },
+        {
+          "name": "Connect WooCommerce Channel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"My WooCommerce Store\",\n    \"channel_type\": \"woocommerce\",\n    \"store_url\": \"https://mystore.com\",\n    \"credentials\": {\n        \"store_url\": \"https://mystore.com\",\n        \"consumer_key\": \"ck_xxxxxxxxxxxxx\",\n        \"consumer_secret\": \"cs_xxxxxxxxxxxxx\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/channels",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "channels"]
+            }
+          }
+        },
+        {
+          "name": "Connect Amazon Channel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Amazon India\",\n    \"channel_type\": \"amazon\",\n    \"credentials\": {\n        \"refresh_token\": \"Atzr|xxxxxxxxxxxxx\",\n        \"lwa_app_id\": \"amzn1.application.xxxxxxxxxxxxx\",\n        \"lwa_client_secret\": \"xxxxxxxxxxxxx\",\n        \"marketplace_id\": \"A21TJRUUN4KGV\",\n        \"region\": \"eu-west-1\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/channels",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "channels"]
+            }
+          }
+        },
+        {
+          "name": "Connect Flipkart Channel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Flipkart Seller\",\n    \"channel_type\": \"flipkart\",\n    \"credentials\": {\n        \"app_id\": \"xxxxxxxxxxxxx\",\n        \"app_secret\": \"xxxxxxxxxxxxx\",\n        \"seller_id\": \"xxxxxxxxxxxxx\",\n        \"sandbox\": false\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/channels",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "channels"]
+            }
+          }
+        },
+        {
+          "name": "Trigger Channel Sync",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/channels/1/sync",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "channels", "1", "sync"]
+            }
+          }
+        },
+        {
+          "name": "Get Channel Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/channels/1/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "channels", "1", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products?page=1&page_size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Premium Cotton T-Shirt\",\n    \"sku\": \"TSH-001\",\n    \"description\": \"Comfortable 100% cotton t-shirt\",\n    \"category\": \"Apparel\",\n    \"brand\": \"MyBrand\",\n    \"cost_price\": 250.00,\n    \"selling_price\": 599.00,\n    \"mrp\": 799.00,\n    \"total_stock\": 150,\n    \"safety_stock\": 20,\n    \"weight\": 0.2,\n    \"tax_rate\": 18.00,\n    \"tags\": [\"cotton\", \"casual\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products"]
+            }
+          }
+        },
+        {
+          "name": "Get Product Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"selling_price\": 649.00,\n    \"total_stock\": 200\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "1"]
+            }
+          }
+        },
+        {
+          "name": "Adjust Stock",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"adjustment\": -50,\n    \"reason\": \"Sold 50 units offline\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/1/stock-adjustment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "1", "stock-adjustment"]
+            }
+          }
+        },
+        {
+          "name": "Get Low Stock Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/products/low-stock/alert",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "low-stock", "alert"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders?page=1&page_size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "50"
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "disabled": true
+                },
+                {
+                  "key": "payment_method",
+                  "value": "cod",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"customer_name\": \"Rajesh Kumar\",\n    \"customer_email\": \"rajesh@example.com\",\n    \"customer_phone\": \"+91-9876543210\",\n    \"shipping_address_line1\": \"123 MG Road\",\n    \"shipping_city\": \"Mumbai\",\n    \"shipping_state\": \"Maharashtra\",\n    \"shipping_pincode\": \"400001\",\n    \"payment_method\": \"cod\",\n    \"items\": [\n        {\n            \"product_id\": 1,\n            \"quantity\": 2\n        }\n    ],\n    \"discount_amount\": 100.00,\n    \"shipping_charges\": 50.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Get Order Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"new_status\": \"shipped\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/1/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", "1", "status"]
+            }
+          }
+        },
+        {
+          "name": "Get Orders Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/orders/analytics/summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "orders", "analytics", "summary"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Dashboard Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/dashboard?period=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "dashboard"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "RTO Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/rto",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "rto"]
+            }
+          }
+        },
+        {
+          "name": "Demand Forecast",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/demand-forecast?product_id=1&days=30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "analytics", "demand-forecast"],
+              "query": [
+                {
+                  "key": "product_id",
+                  "value": "1"
+                },
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"full_name\": \"John Michael Doe\",\n    \"phone\": \"+91-9876543211\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "me"]
+            }
+          }
+        },
+        {
+          "name": "List Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
