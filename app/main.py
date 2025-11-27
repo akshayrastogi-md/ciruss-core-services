@@ -22,6 +22,9 @@ from app.api.v1.endpoints import (
     analytics,
     reports,
     subscriptions,
+    inventory,
+    marketing,
+    webhooks,
 )
 
 
@@ -98,6 +101,9 @@ app.include_router(orders.router, prefix=f"{settings.API_PREFIX}/orders", tags=[
 app.include_router(analytics.router, prefix=f"{settings.API_PREFIX}/analytics", tags=["Analytics"])
 app.include_router(reports.router, prefix=f"{settings.API_PREFIX}/reports", tags=["Reports"])
 app.include_router(subscriptions.router, prefix=f"{settings.API_PREFIX}/subscriptions", tags=["Subscriptions"])
+app.include_router(inventory.router, prefix=f"{settings.API_PREFIX}/inventory", tags=["Inventory"])
+app.include_router(marketing.router, prefix=f"{settings.API_PREFIX}/marketing", tags=["Marketing"])
+app.include_router(webhooks.router, prefix=f"{settings.API_PREFIX}/webhooks", tags=["Webhooks"])
 
 
 @app.get("/health")
