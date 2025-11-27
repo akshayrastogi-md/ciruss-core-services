@@ -30,7 +30,7 @@ from app.core.security import (
 )
 from app.core.deps import get_current_user
 from app.core.config import settings
-from python_slugify import slugify
+from slugify import slugify
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
